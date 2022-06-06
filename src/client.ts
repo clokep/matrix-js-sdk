@@ -4551,10 +4551,11 @@ export class MatrixClient extends TypedEventEmitter<EmittedEvents, ClientEventHa
             return Promise.resolve({}); // guests cannot send receipts so don't bother.
         }
 
-        const path = utils.encodeUri("/rooms/$roomId/receipt/$receiptType/$eventId", {
+        const path = utils.encodeUri("/rooms/$roomId/receipt/$receiptType/$eventId/$endEventId", {
             $roomId: event.getRoomId(),
             $receiptType: receiptType,
             $eventId: event.getId(),
+            $endEventId: event.getId(),
         });
         const promise = this.http.authedRequest(callback, Method.Post, path, undefined, body || {});
 
