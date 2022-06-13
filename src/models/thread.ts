@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClient, MatrixEventEvent, RelationType, RoomEvent } from "../matrix";
+import {MatrixClient, MatrixEventEvent, NotificationCountType, RelationType, RoomEvent} from "../matrix";
 import { TypedReEmitter } from "../ReEmitter";
 import { IRelationsRequestOpts } from "../@types/requests";
 import { IThreadBundledRelationship, MatrixEvent } from "./event";
@@ -66,6 +66,7 @@ export class Thread extends TypedEventEmitter<EmittedEvents, EventHandlerMap> {
 
     private lastEvent: MatrixEvent;
     private replyCount = 0;
+    private notificationCounts: Partial<Record<NotificationCountType, number>> = {};
 
     public readonly room: Room;
     public readonly client: MatrixClient;
@@ -374,6 +375,15 @@ export class Thread extends TypedEventEmitter<EmittedEvents, EventHandlerMap> {
 
     public get liveTimeline(): EventTimeline {
         return this.timelineSet.getLiveTimeline();
+    }
+
+    public getUnreadNotificationCount(type = NotificationCountType.Total): number | undefined {
+        return this.notificationCounts[type] || 0;
+    }
+
+    public setUnreadNotificationCount(type: NotificationCountType, count: number): void {
+        this.notificationCounts[type] = count;
+        this.emit(ThreadEvent.Update, this);
     }
 
     public async fetchEvents(opts: IRelationsRequestOpts = { limit: 20, direction: Direction.Backward }): Promise<{

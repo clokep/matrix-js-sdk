@@ -76,6 +76,7 @@ export interface IJoinedRoom {
     ephemeral: IEphemeral;
     account_data: IAccountData;
     unread_notifications: IUnreadNotificationCounts;
+    unread_thread_notifications?: Map<string, IUnreadNotificationCounts>;
 }
 
 export interface IStrippedState {
