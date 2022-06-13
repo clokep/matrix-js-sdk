@@ -1288,6 +1288,15 @@ export class SyncApi {
                     joinObj.unread_notifications.notification_count,
                 );
 
+                if (joinObj.unread_notifications.unread_thread_notifications) {
+                    for (const threadId in joinObj.unread_notifications.unread_thread_notifications) {
+                        room.getThread(threadId).setUnreadNotificationCount(
+                            NotificationCountType.Total,
+                            joinObj.unread_notifications.unread_thread_notifications[threadId].notification_count,
+                        );
+                    }
+                }
+
                 // We track unread notifications ourselves in encrypted rooms, so don't
                 // bother setting it here. We trust our calculations better than the
                 // server's for this case, and therefore will assume that our non-zero

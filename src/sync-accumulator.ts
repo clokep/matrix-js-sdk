@@ -44,6 +44,11 @@ export interface IEphemeral {
 interface IUnreadNotificationCounts {
     highlight_count?: number;
     notification_count?: number;
+    unread_thread_notifications?: { [threadId: string]: {
+        highlight_count?: number;
+        notification_count?: number;
+    };
+    };
 }
 
 export interface IRoomEvent extends IMinimalEvent {
